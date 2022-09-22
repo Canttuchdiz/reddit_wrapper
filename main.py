@@ -1,13 +1,7 @@
 import requests
+from exceptions import *
 
 #organize layout for wrapper after getting wrapper how-to info
-
-class CredentialsError(Exception):
-    def __init__(self):
-        self.message = "Credentials are invalid"
-
-    def __str__(self):
-        return self.message
 
 class Reddit ():
 
@@ -49,11 +43,4 @@ class Reddit ():
 
 # need to change all header informations
 
-    def user_data(self):
-        token = 'bearer ' + self._token
-        base_url = 'https://oauth.reddit.com'
-        headers = {'Authorization': token, 'User-Agent': 'api-wrapper by Canttuchdiz'}
-        response = requests.get(base_url + '/api/v1/me', headers=headers)
 
-        if response.status_code == 200:
-            print(response.json()['name'], response.json()['comment_karma'])
