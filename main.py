@@ -1,5 +1,4 @@
-import requests
-from exceptions import *
+from imports import *
 
 #organize layout for wrapper after getting wrapper how-to info
 

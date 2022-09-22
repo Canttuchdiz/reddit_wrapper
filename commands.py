@@ -1,5 +1,5 @@
 from base import *
-from imports import *
+import requests
 
 class Commands(BaseClass):
     def user_data(self):
