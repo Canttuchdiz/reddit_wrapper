@@ -1,5 +1,4 @@
-from base import *
-import requests
+from imports import *
 
 class Commands(BaseClass):
     def user_data(self):
@@ -10,3 +9,9 @@ class Commands(BaseClass):
 
         if response.status_code == 200:
             print(response.json()['name'], response.json()['comment_karma'])
+
+    def meme_gen(self):
+        token = 'bearer ' + self._token
+        headers = {'Authorization': token, 'User-Agent': 'api-wrapper by Canttuchdiz'}
+        r = requests.get('https://reddit.com/r/memes.json', headers=headers)
+        return r.json()

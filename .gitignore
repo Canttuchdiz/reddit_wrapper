@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-test.py
+reddit_api_wrapper/test.py
 .Python
 build/
 develop-eggs/

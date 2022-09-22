@@ -2,7 +2,7 @@ from imports import *
 
 #organize layout for wrapper after getting wrapper how-to info
 
-class Reddit ():
+class Reddit (Commands):
 
     def __init__(self, client_id, client_secret, username, password, user_agent):
         self.client_id = client_id
@@ -33,13 +33,5 @@ class Reddit ():
         if self._token is None:
             data = self._collect_data()
             self._token = data
-
-    def meme_gen(self):
-        token = 'bearer ' + self._token
-        headers = {'Authorization': token, 'User-Agent': 'api-wrapper by Canttuchdiz'}
-        r = requests.get('https://reddit.com/r/memes.json', headers=headers)
-        return r.json()
-
-# need to change all header informations
 
 
