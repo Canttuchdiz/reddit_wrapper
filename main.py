@@ -4,46 +4,53 @@ import requests
 
 class CredentialsError(Exception):
     def __init__(self):
-        self.message = "Credentails are invalid"
+        self.message = "Credentials are invalid"
 
     def __str__(self):
         return self.message
 
 class Reddit ():
 
-    def __init__(self, client_id, client_secret, username, password):
+    def __init__(self, client_id, client_secret, username, password, user_agent):
         self.client_id = client_id
         self.client_secret = client_secret
         self.username = username
         self.password = password
-        self.__token = 0
+        self.user_agent = user_agent
+        self._token = None
 
-        self.__token_checker()
+        self._token_checker()
 
 
-    def __collect_data(self):
+    def _collect_data(self):
         base_url = 'https://www.reddit.com/'
         data = {'grant_type': 'password', 'username': self.username, 'password': self.password}
         auth = requests.auth.HTTPBasicAuth(self.client_id, self.client_secret)
-        r = requests.post(base_url + 'api/v1/access_token', data=data, headers={'user-agent': f'api-wrapper by Canttuchdiz'}, auth=auth)
-        d = r.json()
-        return d['access_token']
+        r = requests.post(base_url + 'api/v1/access_token', data=data, headers={'user-agent': f'{self.user_agent}'}, auth=auth)
+        try:
+            d = r.json()
+            return d['access_token']
+        except KeyError:
+            raise CredentialsError
+            quit()
 
 #credential exception or identifier if token not recieved
 
-    def __token_checker(self):
-        if isinstance(self.__token, int):
-            data = self.__collect_data()
-            self.__token = data
+    def _token_checker(self):
+        if self._token is None:
+            data = self._collect_data()
+            self._token = data
 
     def meme_gen(self):
-        r = requests.get('https://reddit.com/r/memes.json')
+        token = 'bearer ' + self._token
+        headers = {'Authorization': token, 'User-Agent': 'api-wrapper by Canttuchdiz'}
+        r = requests.get('https://reddit.com/r/memes.json', headers=headers)
         return r.json()
 
 # need to change all header informations
 
     def user_data(self):
-        token = 'bearer ' + self.__token
+        token = 'bearer ' + self._token
         base_url = 'https://oauth.reddit.com'
         headers = {'Authorization': token, 'User-Agent': 'api-wrapper by Canttuchdiz'}
         response = requests.get(base_url + '/api/v1/me', headers=headers)
